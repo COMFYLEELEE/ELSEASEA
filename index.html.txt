@@ -1,0 +1,2303 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ELSEA 엘시 - 버츄얼 스트리머, 뮤지아 엘시의 공식 웹사이트. 노래, 게임, ASMR 방송과 함께 즐거운 시간을 보내세요!">
+    <meta name="keywords" content="ELSEA, 엘시, 버츄얼 스트리머, VTuber, 메타버스 엔터테인먼트, PrizV, 엘범단">
+    <meta property="og:title" content="ELSEA - Virtual Streamer 엘시 🌊🌸">
+    <meta property="og:description" content="반짝이는 파도와 함께 온 버츄얼 스트리머 엘시! 노래와 게임으로 여러분의 마음에 퐁당!">
+    <meta property="og:image" content="https://i.imgur.com/Elqnp5w.png">
+    <title>ELSEA - Virtual Streamer 엘시 🌊🌸</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Dongle:wght@300;400;700&family=Single+Day&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            /* 하늘색 파스텔톤 중심으로 색상 재정의 */
+            --main-sky: #87CEEB;
+            --pastel-sky: #B8E6F5;
+            --light-sky: #E0F6FF;
+            --deep-sky: #5DADE2;
+            --accent-pink: #FFB6C1;
+            --soft-pink: #FFE4E9;
+            --coral: #FF7F97;
+            --lemon: #FFF5B4;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --dark-gray: #495057;
+            --soft-shadow: rgba(135, 206, 235, 0.15);
+            --wave-blue: #4A90E2;
+            --seal-brown: #8B6F47;
+            --transition-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        body {
+            font-family: 'Single Day', 'Dongle', 'Gamja Flower', sans-serif;
+            background: linear-gradient(180deg, var(--light-sky) 0%, var(--pastel-sky) 50%, var(--soft-pink) 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            color: var(--dark-gray);
+            font-size: 18px;
+            line-height: 1.7;
+        }
+        
+        /* 로딩 화면 - 거품 효과 추가 */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, var(--deep-sky) 0%, var(--pastel-sky) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            overflow: hidden;
+        }
+        
+        .loading-content {
+            text-align: center;
+            z-index: 2;
+            animation: float-loading 2s ease-in-out infinite;
+        }
+        
+        @keyframes float-loading {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .loading-emoji {
+            font-size: 100px;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: wave-loading 3s ease-in-out infinite;
+        }
+        
+        @keyframes wave-loading {
+            0%, 100% { transform: rotate(-15deg) scale(1); }
+            25% { transform: rotate(15deg) scale(1.1); }
+            50% { transform: rotate(-15deg) scale(1); }
+            75% { transform: rotate(15deg) scale(0.9); }
+        }
+        
+        .loading-text {
+            font-family: 'Gamja Flower', sans-serif;
+            font-size: 32px;
+            color: white;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        /* 거품 애니메이션 */
+        .bubbles-container {
+            position: absolute;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            transition: bottom 1.5s ease-in-out;
+        }
+        
+        .bubbles-container.active {
+            bottom: 0;
+        }
+        
+        .bubble {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(135,206,235,0.4) 100%);
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: bubble-rise 2s ease-out forwards;
+        }
+        
+        @keyframes bubble-rise {
+            0% {
+                transform: translateY(100vh) scale(0);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0;
+            }
+        }
+        
+        /* 배경 장식 요소들 */
+        .bg-decorations {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* 꽃잎 애니메이션 */
+        .flower-petal {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: var(--soft-pink);
+            border-radius: 0 100% 0 100%;
+            opacity: 0.6;
+            animation: petal-fall 15s linear infinite;
+        }
+        
+        .flower-petal::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            border-radius: inherit;
+            transform: rotate(72deg);
+        }
+        
+        .flower-petal::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            border-radius: inherit;
+            transform: rotate(144deg);
+        }
+        
+        @keyframes petal-fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(calc(100vh + 100px)) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        /* 물범 캐릭터 */
+        .seal-decoration {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: var(--seal-brown);
+            border-radius: 50% 50% 45% 45%;
+            animation: seal-bounce 4s ease-in-out infinite;
+        }
+        
+        .seal-decoration::before {
+            content: '•  •';
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 16px;
+            color: black;
+        }
+        
+        .seal-decoration::after {
+            content: '︶';
+            position: absolute;
+            bottom: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            color: black;
+        }
+        
+        @keyframes seal-bounce {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            25% { transform: translateY(-20px) rotate(5deg); }
+            50% { transform: translateY(0) rotate(-5deg); }
+            75% { transform: translateY(-10px) rotate(5deg); }
+        }
+        
+        /* 네비게이션 */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 50px;
+            z-index: 1000;
+            box-shadow: 0 4px 20px var(--soft-shadow);
+            transition: transform 0.3s ease;
+        }
+        
+        nav.nav-hidden {
+            transform: translateY(-100%);
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 45px;
+            flex-wrap: wrap;
+        }
+        
+        nav a {
+            color: var(--deep-sky);
+            text-decoration: none;
+            font-size: 22px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+        }
+        
+        nav a::after {
+            content: '🌊';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            opacity: 0;
+            transition: all 0.3s var(--transition-bounce);
+        }
+        
+        nav a:hover::after {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+        
+        nav a:hover {
+            color: var(--accent-pink);
+            transform: translateY(-3px);
+        }
+        
+        /* 스킵 네비게이션 */
+        .skip-nav {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--deep-sky);
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 0 0 5px 0;
+            transition: top 0.3s;
+        }
+        
+        .skip-nav:focus {
+            top: 0;
+        }
+        
+        /* 메인 콘텐츠 */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* 히어로 섹션 - 파도 애니메이션 추가 */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 0;
+            position: relative;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        /* 파도 애니메이션 배경 */
+        .wave-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z' fill='%2387CEEB' fill-opacity='0.3'/%3E%3C/svg%3E") repeat-x;
+            animation: wave-move 20s linear infinite;
+        }
+        
+        .wave:nth-child(2) {
+            bottom: 10px;
+            opacity: 0.5;
+            animation-duration: 25s;
+            animation-delay: -5s;
+        }
+        
+        .wave:nth-child(3) {
+            bottom: 20px;
+            opacity: 0.3;
+            animation-duration: 30s;
+            animation-delay: -10s;
+        }
+        
+        @keyframes wave-move {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .hero-content {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 60px;
+            border-radius: 35px;
+            box-shadow: 0 25px 50px var(--soft-shadow);
+            max-width: 850px;
+            position: relative;
+            overflow: visible;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: hero-entrance 1.2s ease-out forwards;
+        }
+        
+        @keyframes hero-entrance {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        /* 히어로 타이틀 주변 파도 애니메이션 */
+        .hero-title {
+            font-family: 'Gamja Flower', sans-serif;
+            font-size: 7rem;
+            font-weight: bold;
+            color: var(--deep-sky);
+            margin-bottom: 15px;
+            text-shadow: 4px 4px 0 var(--pastel-sky), 6px 6px 0 var(--accent-pink);
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+            animation: title-wave 3s ease-in-out infinite;
+        }
+        
+        @keyframes title-wave {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            25% { transform: translateY(-10px) rotate(2deg); }
+            50% { transform: translateY(0) rotate(-2deg); }
+            75% { transform: translateY(-5px) rotate(2deg); }
+        }
+        
+        .hero-title::before,
+        .hero-title::after {
+            content: '🌊';
+            position: absolute;
+            font-size: 3rem;
+            animation: wave-splash 2s ease-in-out infinite;
+        }
+        
+        .hero-title::before {
+            left: -60px;
+            top: 0;
+            animation-delay: 0s;
+        }
+        
+        .hero-title::after {
+            right: -60px;
+            top: 0;
+            animation-delay: 1s;
+        }
+        
+        @keyframes wave-splash {
+            0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+            50% { transform: translateY(-20px) scale(1.3) rotate(180deg); }
+        }
+        
+        .hero-kitsch-phrase {
+            font-family: 'Single Day', sans-serif;
+            font-size: 2.8rem;
+            color: var(--coral);
+            margin-bottom: 30px;
+            font-weight: bold;
+            text-shadow: 2px 2px 0 var(--white), 3px 3px 0 var(--lemon);
+            letter-spacing: 1px;
+            display: inline-block;
+            line-height: 1.3;
+            animation: phrase-bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes phrase-bounce {
+            0%, 100% { transform: scale(1) rotate(-1deg); }
+            50% { transform: scale(1.05) rotate(1deg); }
+        }
+        
+        .hero-description {
+            font-size: 24px;
+            line-height: 1.8;
+            color: var(--dark-gray);
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+        
+        /* 버튼 스타일 개선 */
+        .cta-buttons {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 18px 45px;
+            font-size: 22px;
+            font-weight: 700;
+            border: 3px solid;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s var(--transition-bounce);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.6s ease;
+        }
+        
+        .btn:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+        
+        .btn-primary {
+            background: var(--deep-sky);
+            color: white;
+            border-color: var(--deep-sky);
+            box-shadow: 0 6px 18px rgba(93, 173, 226, 0.5);
+        }
+        
+        .btn-primary::before {
+            background: var(--pastel-sky);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-4px) rotate(-3deg) scale(1.05);
+            box-shadow: 0 12px 28px rgba(93, 173, 226, 0.7);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--deep-sky);
+            border-color: var(--deep-sky);
+            box-shadow: 0 6px 18px rgba(135, 206, 235, 0.5);
+        }
+        
+        .btn-secondary::before {
+            background: var(--light-sky);
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-4px) rotate(3deg) scale(1.05);
+            box-shadow: 0 12px 28px rgba(135, 206, 235, 0.7);
+        }
+        
+        .btn span {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* 섹션 스타일 */
+        .section {
+            padding: 80px 0;
+            position: relative;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .section-title {
+            font-family: 'Gamja Flower', sans-serif;
+            font-size: 4.5rem;
+            font-weight: bold;
+            text-align: center;
+            color: var(--white);
+            text-shadow: 2px 2px 0 var(--deep-sky), 4px 4px 0 var(--pastel-sky), 6px 6px 0px rgba(0,0,0,0.1);
+            padding: 15px 35px;
+            display: inline-block;
+            width: auto;
+            max-width: 90%;
+            border-radius: 25px;
+            background: linear-gradient(135deg, var(--deep-sky), var(--pastel-sky));
+            box-shadow: 0 8px 25px rgba(93, 173, 226, 0.3);
+            position: relative;
+            line-height: 1.3;
+        }
+        
+        .section-title-container {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        /* 물범 장식 */
+        .section-title-container::before,
+        .section-title-container::after {
+            content: '🦭';
+            position: absolute;
+            font-size: 3rem;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: seal-wiggle 2s ease-in-out infinite;
+        }
+        
+        .section-title-container::before {
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .section-title-container::after {
+            right: 10%;
+            animation-delay: 1s;
+        }
+        
+        @keyframes seal-wiggle {
+            0%, 100% { transform: translateY(-50%) rotate(-10deg); }
+            50% { transform: translateY(-50%) rotate(10deg); }
+        }
+        
+        /* 프로필 섹션 */
+        .character-profile {
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 30px;
+            padding: 60px;
+            box-shadow: 0 20px 40px var(--soft-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .profile-name {
+            font-family: 'Gamja Flower', sans-serif;
+            font-size: 3.8rem;
+            color: var(--deep-sky);
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0 var(--accent-pink);
+            animation: name-float 3s ease-in-out infinite;
+        }
+        
+        @keyframes name-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .profile-title {
+            font-family: 'Gamja Flower', sans-serif;
+            font-size: 2.2rem;
+            color: var(--coral);
+            font-weight: bold;
+        }
+        
+        .profile-content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: flex-start;
+        }
+        
+        .profile-details-column {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .profile-info-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+        
+        .profile-info-card {
+            background: linear-gradient(135deg, var(--light-sky) 0%, var(--pastel-sky) 100%);
+            border: 2px solid var(--deep-sky);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 5px 15px var(--soft-shadow);
+            transition: all 0.35s var(--transition-bounce);
+            cursor: default;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-info-card::before {
+            content: '🌸';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 80px;
+            opacity: 0.1;
+            transform: rotate(-15deg);
+        }
+        
+        .profile-info-card:hover {
+            transform: translateY(-10px) scale(1.04) rotate(-1.5deg);
+            box-shadow: 0 15px 30px rgba(93, 173, 226, 0.4);
+        }
+        
+        .profile-info-card h4 {
+            font-family: 'Gamja Flower', sans-serif;
+            font-size: 1.8rem;
+            color: var(--deep-sky);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--accent-pink);
+            padding-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        .info-item {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .info-label {
+            font-weight: 700;
+            color: var(--coral);
+            min-width: 90px;
+            flex-shrink: 0;
+            font-size: 22px;
+        }
+        
+        .info-value {
+            color: var(--dark-gray);
+            font-size: 22px;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+        
+        .charm-points {
+            background: linear-gradient(135deg, var(--coral) 0%, var(--accent-pink) 100%);
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .charm-points::after {
+            content: '💕';
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            font-size: 120px;
+            opacity: 0.15;
+            transform: rotate(15deg);
+        }
+        
+        .charm-points h4 {
+            font-family: 'Gamja Flower', sans-serif;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+        }
+        
+        .charm-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .charm-list li {
+            color: white;
+            margin-bottom: 12px;
+            font-size: 23px;
+            position: relative;
+            padding-left: 35px;
+            line-height: 1.6;
+            font-weight: 400;
+            transition: transform 0.3s ease;
+        }
+        
+        .charm-list li:hover {
+            transform: translateX(10px);
+        }
+        
+        .charm-list li::before {
+            content: '🌊';
+            position: absolute;
+            left: 0;
+            top: 2px;
+            transition: transform 0.3s ease;
+        }
+        
+        .charm-list li:hover::before {
+            transform: scale(1.3) rotate(360deg);
+        }
+        
+        /* 의상 갤러리 */
+        .outfit-gallery h3 {
+            font-family: 'Gamja Flower', sans-serif;
+            font-size: 2.5rem;
+            color: var(--deep-sky);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        
+        .outfit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .outfit-card {
+            background: white;
+            border-radius: 20px;
+            overflow: visible;
+            box-shadow: 0 10px 30px var(--soft-shadow);
+            transition: transform 0.4s var(--transition-bounce);
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .outfit-card::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            filter: blur(35px);
+            opacity: 0;
+            z-index: -1;
+            border-radius: 30px;
+            transition: opacity 0.4s ease-in-out;
+            transform-origin: center center;
+        }
+        
+        .outfit-card:hover {
+            transform: translateY(-25px) scale(1.15) rotate(3deg);
+            z-index: 10;
+        }
+        
+        .outfit-card:nth-of-type(3n+1):hover {
+            transform: translateY(-25px) scale(1.15) rotate(5deg);
+        }
+        
+        .outfit-card:nth-of-type(3n+2):hover {
+            transform: translateY(-25px) scale(1.15) rotate(-5deg);
+        }
+        
+        .outfit-card:nth-of-type(3n+3):hover {
+            transform: translateY(-25px) scale(1.15) rotate(3deg);
+        }
+        
+        .outfit-card:hover::before {
+            opacity: 0.8;
+            animation: card-glow 2s ease-in-out infinite;
+        }
+        
+        @keyframes card-glow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .outfit-card:nth-of-type(3n+1)::before {
+            background: linear-gradient(160deg, var(--deep-sky) 0%, var(--pastel-sky) 50%, var(--lemon) 100%);
+        }
+        
+        .outfit-card:nth-of-type(3n+2)::before {
+            background: linear-gradient(160deg, var(--accent-pink) 0%, var(--coral) 50%, var(--light-sky) 100%);
+        }
+        
+        .outfit-card:nth-of-type(3n+3)::before {
+            background: linear-gradient(160deg, var(--coral) 0%, var(--lemon) 50%, var(--deep-sky) 100%);
+        }
+        
+        .outfit-image-container {
+            width: 100%;
+            height: 380px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--light-gray);
+            border-radius: 20px;
+        }
+        
+        .outfit-image-container img,
+        .outfit-image-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .outfit-info {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .outfit-name {
+            font-family: 'Gamja Flower', sans-serif;
+            font-size: 1.8rem;
+            color: var(--coral);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .outfit-description {
+            color: var(--dark-gray);
+            font-size: 20px;
+        }
+        
+        /* 콘텐츠 그리드 */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px var(--soft-shadow);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--light-sky);
+            cursor: pointer;
+        }
+        
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, var(--light-sky), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+            opacity: 0;
+        }
+        
+        .content-card:hover::before {
+            animation: shine 0.5s ease-in-out;
+        }
+        
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+                opacity: 0;
+            }
+        }
+        
+        .content-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px var(--soft-shadow);
+            border-color: var(--deep-sky);
+        }
+        
+        .content-icon {
+            font-size: 4.5rem;
+            margin-bottom: 20px;
+            color: var(--deep-sky);
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+        
+        .content-card:hover .content-icon {
+            transform: scale(1.2) rotate(10deg);
+            animation: icon-bounce 0.6s ease;
+        }
+        
+        @keyframes icon-bounce {
+            0%, 100% { transform: scale(1.2) rotate(10deg); }
+            50% { transform: scale(1.4) rotate(-10deg); }
+        }
+        
+        .content-card h3 {
+            font-family: 'Gamja Flower', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--coral);
+            font-weight: bold;
+            line-height: 1.3;
+        }
+        
+        .content-card p {
+            color: var(--dark-gray);
+            line-height: 1.6;
+            font-size: 21px;
+        }
+        
+        /* 음악 플레이어 - 수정된 버전 */
+        .music-player {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 20px 40px var(--soft-shadow);
+            margin-top: 60px;
+        }
+        
+        .music-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .music-header h3 {
+            font-family: 'Gamja Flower', sans-serif;
+            font-size: 3rem;
+            color: var(--deep-sky);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .music-header p {
+            color: var(--dark-gray);
+            font-size: 22px;
+        }
+        
+        .music-subheader {
+            font-family: 'Gamja Flower', sans-serif;
+            font-size: 2.4rem;
+            color: var(--coral);
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+        
+        .playlist {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .song-item {
+            background: linear-gradient(135deg, var(--light-sky) 0%, var(--pastel-sky) 100%);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .song-item:hover {
+            background: linear-gradient(135deg, var(--deep-sky) 0%, var(--pastel-sky) 100%);
+            transform: translateX(10px) scale(1.02);
+            color: white;
+            border-color: var(--white);
+            box-shadow: 0 10px 30px rgba(93, 173, 226, 0.4);
+        }
+        
+        .song-item:hover .song-title,
+        .song-item:hover .song-artist,
+        .song-item:hover .song-number {
+            color: white;
+        }
+        
+        .song-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--deep-sky);
+            min-width: 40px;
+            transition: color 0.3s ease;
+        }
+        
+        .song-info {
+            flex: 1;
+        }
+        
+        .song-title {
+            font-size: 23px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--dark-gray);
+            transition: color 0.3s ease;
+        }
+        
+        .song-artist {
+            font-size: 19px;
+            opacity: 0.8;
+            color: #555;
+            transition: color 0.3s ease;
+        }
+        
+        .play-button {
+            width: 50px;
+            height: 50px;
+            background: var(--coral);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .song-item:hover .play-button {
+            background: white;
+            color: var(--coral);
+            transform: scale(1.2) rotate(360deg);
+        }
+        
+        /* 유튜브 모달 - 자동재생 수정 */
+        .youtube-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        @keyframes modal-bounce-in {
+            0% {
+                opacity: 0;
+                transform: scale(0.7) rotate(-5deg);
+            }
+            50% {
+                transform: scale(1.05) rotate(2deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+        
+        .youtube-modal-content {
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            animation: modal-bounce-in 0.5s var(--transition-bounce) forwards;
+            overflow: visible;
+        }
+        
+        .youtube-modal-backdrop {
+            position: absolute;
+            top: -30px;
+            left: -30px;
+            right: -30px;
+            bottom: -30px;
+            background: linear-gradient(160deg, var(--deep-sky) 0%, var(--pastel-sky) 45%, var(--coral) 100%);
+            filter: blur(60px);
+            opacity: 0.6;
+            z-index: -1;
+            border-radius: 40px;
+            transform: scale(1.05);
+            animation: modal-glow 3s ease-in-out infinite;
+        }
+        
+        @keyframes modal-glow {
+            0%, 100% { transform: scale(1.05); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .youtube-modal-close {
+            position: absolute;
+            top: -18px;
+            right: -18px;
+            background-color: var(--coral);
+            color: white;
+            border: 3px solid white;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.25);
+            transition: all 0.25s ease;
+            z-index: 10;
+        }
+        
+        .youtube-modal-close:hover {
+            background-color: var(--deep-sky);
+            transform: scale(1.15) rotate(90deg);
+        }
+        
+        .youtube-player-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            background: #000;
+            border-radius: 12px;
+        }
+        
+        .youtube-player-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* 갤러리 - 무한 스크롤 */
+        .gallery-section {
+            position: relative;
+            overflow: hidden;
+            margin-top: 60px;
+            padding: 20px 0;
+        }
+        
+        .gallery-container {
+            position: relative;
+            height: 450px;
+            overflow: hidden;
+        }
+        
+        .gallery-mask {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 150px;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .gallery-mask.left {
+            left: 0;
+            background: linear-gradient(to right, rgba(224, 246, 255, 1) 0%, transparent 100%);
+        }
+        
+        .gallery-mask.right {
+            right: 0;
+            background: linear-gradient(to left, rgba(224, 246, 255, 1) 0%, transparent 100%);
+        }
+        
+        .gallery {
+            display: flex;
+            gap: 30px;
+            position: absolute;
+            animation: scroll-gallery 40s linear infinite;
+        }
+        
+        @keyframes scroll-gallery {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .gallery-item {
+            flex: 0 0 350px;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: transform 0.4s var(--transition-bounce);
+            box-shadow: 0 10px 30px var(--soft-shadow);
+            background: white;
+            padding: 10px;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.1) rotate(2deg);
+            z-index: 10;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* 이미지 뷰어 (라이트박스) */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 3000;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+        
+        .lightbox-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            max-width: 90%;
+            max-height: 90%;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .lightbox.active .lightbox-content {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        
+        .lightbox img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .lightbox-close:hover {
+            transform: scale(1.2) rotate(90deg);
+        }
+        
+        /* 푸터 */
+        footer {
+            background: white;
+            padding: 50px 0;
+            text-align: center;
+            margin-top: 100px;
+            box-shadow: 0 -10px 30px var(--soft-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--deep-sky), var(--pastel-sky), var(--coral), var(--deep-sky));
+            background-size: 400% 100%;
+            animation: gradient-move 8s linear infinite;
+        }
+        
+        @keyframes gradient-move {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--deep-sky) 0%, var(--pastel-sky) 100%);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-weight: 700;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .social-links a::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+        
+        .social-links a:hover::before {
+            width: 100px;
+            height: 100px;
+        }
+        
+        .social-links a:hover {
+            transform: translateY(-5px) scale(1.1) rotate(360deg);
+            box-shadow: 0 10px 30px var(--soft-shadow);
+        }
+        
+        .footer-text {
+            color: var(--deep-sky);
+            font-size: 20px;
+            font-weight: 400;
+        }
+        
+        /* 스크롤 탑 버튼 */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--deep-sky) 0%, var(--pastel-sky) 100%);
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: scroll-btn-bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes scroll-btn-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .scroll-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+        
+        .scroll-top.show {
+            display: flex;
+        }
+        
+        /* 특수 효과 클래스 */
+        .sparkle {
+            position: relative;
+        }
+        
+        .sparkle::after {
+            content: '✨';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 1.5rem;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        /* 반응형 */
+        @media (max-width: 992px) {
+            .profile-content-wrapper {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-info-cards {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+            
+            .outfit-gallery {
+                margin-top: 40px;
+            }
+            
+            .gallery {
+                animation-duration: 30s;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                font-size: 17px;
+            }
+            
+            nav {
+                padding: 10px 20px;
+            }
+            
+            nav ul {
+                gap: 20px;
+            }
+            
+            nav a {
+                font-size: 20px;
+            }
+            
+            .hero-title {
+                font-size: 4.5rem;
+            }
+            
+            .hero-title::before,
+            .hero-title::after {
+                font-size: 2rem;
+                display: none;
+            }
+            
+            .hero-kitsch-phrase {
+                font-size: 2rem;
+                white-space: normal;
+            }
+            
+            .hero-description {
+                font-size: 22px;
+            }
+            
+            .btn {
+                font-size: 20px;
+                padding: 15px 35px;
+            }
+            
+            .hero-content {
+                padding: 40px 20px;
+            }
+            
+            .profile-info-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .outfit-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title-container {
+                margin-bottom: 40px;
+            }
+            
+            .section-title-container::before,
+            .section-title-container::after {
+                display: none;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+                padding: 8px 15px;
+                line-height: 1.2;
+            }
+            
+            .profile-info-card h4 {
+                font-size: 1.6rem;
+            }
+            
+            .info-label,
+            .info-value {
+                font-size: 20px;
+            }
+            
+            .charm-points h4 {
+                font-size: 1.8rem;
+            }
+            
+            .charm-list li {
+                font-size: 21px;
+            }
+            
+            .outfit-gallery h3 {
+                font-size: 2.2rem;
+            }
+            
+            .outfit-name {
+                font-size: 1.6rem;
+            }
+            
+            .outfit-description {
+                font-size: 19px;
+            }
+            
+            .content-card h3 {
+                font-size: 1.8rem;
+            }
+            
+            .content-card p {
+                font-size: 20px;
+            }
+            
+            .music-header h3 {
+                font-size: 2.5rem;
+            }
+            
+            .music-header p {
+                font-size: 20px;
+            }
+            
+            .music-subheader {
+                font-size: 2.2rem;
+            }
+            
+            .song-title {
+                font-size: 21px;
+            }
+            
+            .song-artist {
+                font-size: 18px;
+            }
+            
+            .footer-text {
+                font-size: 19px;
+            }
+            
+            .youtube-modal-content {
+                width: 95%;
+                padding: 15px;
+            }
+            
+            .youtube-modal-close {
+                top: 5px;
+                right: 5px;
+                width: 35px;
+                height: 35px;
+                font-size: 18px;
+            }
+            
+            .youtube-modal-backdrop {
+                top: -15px;
+                left: -15px;
+                right: -15px;
+                bottom: -15px;
+                filter: blur(30px);
+            }
+            
+            .scroll-top {
+                bottom: 20px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+            
+            .gallery-item {
+                flex: 0 0 280px;
+                height: 320px;
+            }
+            
+            .gallery-container {
+                height: 350px;
+            }
+        }
+        
+        /* 프린트 스타일 */
+        @media print {
+            nav, .scroll-top, .loading-screen {
+                display: none !important;
+            }
+            
+            body {
+                background: white;
+            }
+            
+            .section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 로딩 화면 -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-emoji">🌊</div>
+            <div class="loading-text">ELSEA, 너의 세상으로 퐁당!</div>
+        </div>
+        <div class="bubbles-container" id="bubblesContainer"></div>
+    </div>
+
+    <!-- 스킵 네비게이션 -->
+    <a href="#main-content" class="skip-nav">메인 콘텐츠로 건너뛰기</a>
+
+    <!-- 배경 장식 -->
+    <div class="bg-decorations" id="bgDecorations"></div>
+
+    <nav id="navbar">
+        <ul>
+            <li><a href="#home" aria-label="홈으로 이동">HOME</a></li>
+            <li><a href="#profile" aria-label="프로필로 이동">PROFILE</a></li>
+            <li><a href="#content" aria-label="콘텐츠로 이동">CONTENT</a></li>
+            <li><a href="#music" aria-label="음악으로 이동">MUSIC</a></li>
+            <li><a href="#gallery" aria-label="갤러리로 이동">GALLERY</a></li>
+            <li><a href="#contact" aria-label="연락처로 이동">CONTACT</a></li>
+        </ul>
+    </nav>
+
+    <main id="main-content" class="container">
+        <section id="home" class="hero">
+            <div class="wave-container">
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+            </div>
+            <div class="hero-content">
+                <h1 class="hero-title sparkle">ELSEA</h1>
+                <p class="hero-kitsch-phrase">너희들의 세상에 풍덩<br>세이렌 등장!</p>
+                <p class="hero-description">
+                    안녕 엘범이들! 반짝이는 파도와 함께 온 버츄얼 스트리머 엘시에요!<br>
+                    노래와 게임, 그리고 즐거운 이야기로 여러분의 마음에<br>퐁당 빠져들 준비 완료! 💕
+                </p>
+                <div class="cta-buttons">
+                    <a href="https://ch.sooplive.co.kr/elisehs" target="_blank" class="btn btn-primary" rel="noopener noreferrer">
+                        <span>방송 보러가기 퐁당!</span> LIVE
+                    </a>
+                    <a href="https://cafe.naver.com/elsea" target="_blank" class="btn btn-secondary" rel="noopener noreferrer">
+                        <span>엘범단 모여랏!</span> 팬카페
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="profile" class="section">
+            <div class="section-title-container">
+                <h2 class="section-title">💖 ELSEA 파헤치기 💖</h2>
+            </div>
+            <div class="character-profile">
+                <div class="profile-header">
+                    <h3 class="profile-name">엘시 (ELSEA)</h3>
+                    <p class="profile-title">✨ 뮤지아 엘시 ✨</p>
+                </div>
+                <div class="profile-content-wrapper">
+                    <div class="profile-details-column">
+                        <div class="profile-info-cards">
+                            <div class="profile-info-card">
+                                <h4>기본 정보 📜</h4>
+                                <div class="info-item">
+                                    <span class="info-label">🎤 닉네임</span>
+                                    <span class="info-value">엘시♪ (Musia ELSEA)</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">🎂 생일</span>
+                                    <span class="info-value">2월 2일 (물병자리 요정!)</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">🎨 캐릭터</span>
+                                    <span class="info-value">푸른 바다의 세이렌 공주님</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">✨ MBTI</span>
+                                    <span class="info-value">INFJ (따뜻한 마음의 몽상가)</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">🌏 언어</span>
+                                    <span class="info-value">한국어, 영어, 일본어 (3개 국어 마스터!)</span>
+                                </div>
+                            </div>
+                            <div class="profile-info-card">
+                                <h4>소속 및 활동 🏢</h4>
+                                <div class="info-item">
+                                    <span class="info-label">🏢 소속</span>
+                                    <span class="info-value">메타버스 엔터테인먼트</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">🎶 그룹</span>
+                                    <span class="info-value">PrizV (반짝이는 프리즘 보이스!)</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">🐾 동아리</span>
+                                    <span class="info-value">개모임 (멍멍! 즐거운 친구들!)</span>
+                                </div>
+                            </div>
+                            <div class="profile-info-card">
+                                <h4>팬 & 취향 💖</h4>
+                                <div class="info-item">
+                                    <span class="info-label">🦭 팬덤명</span>
+                                    <span class="info-value">엘범단 (엘시의 물범단!)</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">💙 좋아하는 것</span>
+                                    <span class="info-value">노래 부르기, 게임 탐험, ASMR 속삭임</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">🎮 응원팀</span>
+                                    <span class="info-value">Gen.G Esports, 리버풀 FC (승리의 요정!)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="charm-points">
+                            <h4>✨ 엘시의 심쿵! 매력 포인트 ✨</h4>
+                            <ul class="charm-list">
+                                <li>퐁당 빠져드는 천상의 목소리! 🎶</li>
+                                <li>3개 국어 술술~ 언어 능력자! 🗣️🌍</li>
+                                <li>게임도 노래도 ASMR도! 만능 엔터테이너! 🎮🎤🎧</li>
+                                <li>귀염뽀짝 리액션에 심장이 콩닥! 🥰💖</li>
+                                <li>엘범단을 향한 무한 애정! 팬 사랑둥이! 💌✨</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="outfit-gallery">
+                        <h3 class="outfit-gallery-title">👗 엘시의 키치 옷장!! 🎀</h3>
+                        <div class="outfit-grid">
+                            <div class="outfit-card">
+                                <div class="outfit-image-container">
+                                    <video src="https://i.imgur.com/DyuXsUd_lq.mp4" autoplay loop muted playsinline></video>
+                                </div>
+                                <div class="outfit-info">
+                                    <h4 class="outfit-name">상큼발랄 데일리룩</h4>
+                                    <p class="outfit-description">오늘도 퐁당퐁당 귀여움 폭발!</p>
+                                </div>
+                            </div>
+                            <div class="outfit-card">
+                                <div class="outfit-image-container">
+                                    <video src="https://i.imgur.com/4Zey7y2_lq.mp4" autoplay loop muted playsinline></video>
+                                </div>
+                                <div class="outfit-info">
+                                    <h4 class="outfit-name">포근포근 방송의상</h4>
+                                    <p class="outfit-description">엘범단과 함께하는 아늑한 시간!</p>
+                                </div>
+                            </div>
+                            <div class="outfit-card">
+                                <div class="outfit-image-container">
+                                    <video src="https://i.imgur.com/0DFbMZZ_lq.mp4" autoplay loop muted playsinline></video>
+                                </div>
+                                <div class="outfit-info">
+                                    <h4 class="outfit-name">반짝반짝 무대의상</h4>
+                                    <p class="outfit-description">세이렌 아이돌 모드 ON!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="content" class="section">
+            <div class="section-title-container">
+                <h2 class="section-title">🎮 ELSEA의 방송 콘텐츠 🎤</h2>
+            </div>
+            <div class="content-grid">
+                <div class="content-card">
+                    <div class="content-icon">🎮</div>
+                    <h3>좌충우돌<br>게임 탐험!</h3>
+                    <p>다양한 게임을 즐기며 소통해요! 요즘엔 마비노기 홀릭 중! 함께 달려요~</p>
+                </div>
+                <div class="content-card">
+                    <div class="content-icon">🎤</div>
+                    <h3>심쿵 보이스!<br>노래 방송</h3>
+                    <p>아름다운 커버곡과 함께 3개 국어로 펼쳐지는 감성 라이브! 힐링은 덤!</p>
+                </div>
+                <div class="content-card">
+                    <div class="content-icon">🎧</div>
+                    <h3>속삭이는<br>ASMR</h3>
+                    <p>달콤하고 편안한 목소리로 당신의 하루 끝에 작은 쉼표를 선물할게요.</p>
+                </div>
+                <div class="content-card">
+                    <div class="content-icon">💬</div>
+                    <h3>왁자지껄!<br>저스트 채팅</h3>
+                    <p>엘범단과 함께하는 즐겁고 유쾌한 수다! 오늘은 또 무슨 이야기가 나올까?</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="music" class="section">
+            <div class="section-title-container">
+                <h2 class="section-title">🎶 ELSEA의 플레이리스트 🎶</h2>
+            </div>
+            <div class="music-player">
+                <div class="music-header">
+                    <h3>🎵 엘시의 노래 모음 🎵</h3>
+                    <p>엘시가 직접 부른 커버곡과 오리지널곡들을 들어보세요!</p>
+                </div>
+
+                <h3 class="music-subheader">🎤 커버곡 맛집 🎤</h3>
+                <div class="playlist">
+                    <div class="song-item" data-video-id="F3bfihvQuUk">
+                        <span class="song-number">01</span>
+                        <div class="song-info">
+                            <div class="song-title">Betelgeuse (Yuuri)</div>
+                            <div class="song-artist">ELSEA Cover</div>
+                        </div>
+                        <div class="play-button">▶</div>
+                    </div>
+                    <div class="song-item" data-video-id="ZRc8tb0bPOI">
+                        <span class="song-number">02</span>
+                        <div class="song-info">
+                            <div class="song-title">DASH (PLAVE)</div>
+                            <div class="song-artist">ELSEA, YUNEZE Cover</div>
+                        </div>
+                        <div class="play-button">▶</div>
+                    </div>
+                    <div class="song-item" data-video-id="magdf8fz7c0">
+                        <span class="song-number">03</span>
+                        <div class="song-info">
+                            <div class="song-title">Spirits of the Sea (Kenshi Yonezu)</div>
+                            <div class="song-artist">ELSEA Cover</div>
+                        </div>
+                        <div class="play-button">▶</div>
+                    </div>
+                    <div class="song-item" data-video-id="A3hJNwHxaqU">
+                        <span class="song-number">04</span>
+                        <div class="song-info">
+                            <div class="song-title">Hated by Life Itself (命に嫌われている。)</div>
+                            <div class="song-artist">ELSEA Cover</div>
+                        </div>
+                        <div class="play-button">▶</div>
+                    </div>
+                </div>
+
+                <h3 class="music-subheader">🌟 반짝이는 오리지널곡 🌟</h3>
+                <div class="playlist">
+                    <div class="song-item" data-video-id="g3LFPXOJK4g">
+                        <span class="song-number">01</span>
+                        <div class="song-info">
+                            <div class="song-title">Special</div>
+                            <div class="song-artist">ELSEA</div>
+                        </div>
+                        <div class="play-button">▶</div>
+                    </div>
+                    <div class="song-item" data-video-id="VU8OkXaUdmY">
+                        <span class="song-number">02</span>
+                        <div class="song-info">
+                            <div class="song-title">Special 〜누구보다도 반짝일 너를 위해〜</div>
+                            <div class="song-artist">GMI (개모임)</div>
+                        </div>
+                        <div class="play-button">▶</div>
+                    </div>
+                    <div class="song-item" data-video-id="zOLAGE012ns">
+                        <span class="song-number">03</span>
+                        <div class="song-info">
+                            <div class="song-title">Hi-Five</div>
+                            <div class="song-artist">PrizV (ELSEA)</div>
+                        </div>
+                        <div class="play-button">▶</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery" class="section">
+            <div class="section-title-container">
+                <h2 class="section-title">📸 ELSEA의 순간들 📸</h2>
+            </div>
+            <div class="gallery-section">
+                <div class="gallery-container">
+                    <div class="gallery-mask left"></div>
+                    <div class="gallery-mask right"></div>
+                    <div class="gallery" id="galleryTrack">
+                        <!-- 갤러리 아이템은 JavaScript로 생성 -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <div class="container">
+            <div class="social-links">
+                <a href="https://ch.sooplive.co.kr/elisehs" target="_blank" title="SOOP 방송 채널" rel="noopener noreferrer" aria-label="SOOP 채널로 이동">S</a>
+                <a href="https://www.youtube.com/@ElseaCh" target="_blank" title="YouTube 메인 채널" rel="noopener noreferrer" aria-label="YouTube 채널로 이동">Y</a>
+                <a href="https://cafe.naver.com/elsea" target="_blank" title="공식 팬카페" rel="noopener noreferrer" aria-label="팬카페로 이동">F</a>
+            </div>
+            <p class="footer-text">
+                © 2024 ELSEA. All rights reserved. | 🌊🌸 뮤지아 엘시 🌸🌊
+            </p>
+        </div>
+    </footer>
+
+    <!-- 유튜브 모달 -->
+    <div id="youtubeModal" class="youtube-modal" role="dialog" aria-label="유튜브 영상 재생" aria-hidden="true">
+        <div class="youtube-modal-content">
+            <div class="youtube-modal-backdrop"></div>
+            <button id="youtubeModalClose" class="youtube-modal-close" aria-label="모달 닫기">×</button>
+            <div id="youtubePlayerContainer" class="youtube-player-container"></div>
+        </div>
+    </div>
+
+    <!-- 라이트박스 -->
+    <div id="lightbox" class="lightbox" role="dialog" aria-label="이미지 확대 보기" aria-hidden="true">
+        <span class="lightbox-close" aria-label="닫기">&times;</span>
+        <div class="lightbox-content">
+            <img src="" alt="확대된 이미지">
+        </div>
+    </div>
+
+    <!-- 스크롤 탑 버튼 -->
+    <button class="scroll-top" id="scrollTop" aria-label="맨 위로 이동">↑</button>
+
+    <script>
+        // 거품 생성 함수
+        function createBubbles() {
+            const bubblesContainer = document.getElementById('bubblesContainer');
+            for (let i = 0; i < 50; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                bubble.style.width = bubble.style.height = Math.random() * 60 + 20 + 'px';
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.animationDelay = Math.random() * 2 + 's';
+                bubble.style.animationDuration = Math.random() * 2 + 2 + 's';
+                bubblesContainer.appendChild(bubble);
+            }
+        }
+
+        // 로딩 화면 제거
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                createBubbles();
+                const bubblesContainer = document.getElementById('bubblesContainer');
+                bubblesContainer.classList.add('active');
+                
+                setTimeout(() => {
+                    const loadingScreen = document.getElementById('loadingScreen');
+                    loadingScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                    }, 500);
+                }, 2000);
+            }, 1500);
+        });
+
+        // 배경 장식 생성
+        function createDecorations() {
+            const bgDecorations = document.getElementById('bgDecorations');
+            
+            // 꽃잎 생성
+            for (let i = 0; i < 5; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'flower-petal';
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.animationDelay = Math.random() * 15 + 's';
+                petal.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                bgDecorations.appendChild(petal);
+            }
+            
+            // 물범 생성
+            for (let i = 0; i < 3; i++) {
+                const seal = document.createElement('div');
+                seal.className = 'seal-decoration';
+                seal.style.left = Math.random() * 80 + 10 + '%';
+                seal.style.top = Math.random() * 80 + 10 + '%';
+                seal.style.animationDelay = Math.random() * 4 + 's';
+                bgDecorations.appendChild(seal);
+            }
+        }
+
+        createDecorations();
+
+        // 갤러리 이미지 설정
+        const galleryImages = [
+            'https://i.imgur.com/kPFRraB.jpeg',
+            'https://i.imgur.com/lDfju3C.jpeg',
+            'https://i.imgur.com/WGD386D.png',
+            'https://i.imgur.com/ZzY3Zsi.png',
+            'https://i.imgur.com/uFlCmTF.png',
+            'https://i.imgur.com/Kcdi6b6.jpeg',
+            'https://i.imgur.com/eKfgbs1.png',
+            'https://i.imgur.com/PxoVXtt.png'
+        ];
+
+        // 갤러리 생성
+        function createGallery() {
+            const galleryTrack = document.getElementById('galleryTrack');
+            
+            // 이미지를 두 번 반복하여 무한 스크롤 효과
+            for (let i = 0; i < 2; i++) {
+                galleryImages.forEach((src, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item';
+                    item.innerHTML = `<img src="${src}" alt="엘시의 순간 ${index + 1}" loading="lazy">`;
+                    galleryTrack.appendChild(item);
+                });
+            }
+        }
+
+        createGallery();
+
+        // 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                if (this.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        const offsetTop = targetElement.offsetTop - 70;
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+
+        // 네비게이션 숨기기/보이기
+        let lastScrollTop = 0;
+        const navbar = document.getElementById('navbar');
+        
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                navbar.classList.add('nav-hidden');
+            } else {
+                navbar.classList.remove('nav-hidden');
+            }
+            
+            lastScrollTop = scrollTop;
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // 하트와 별 이모지 생성
+        function createFloatingEmoji() {
+            const emojis = ['💕', '💖', '🌊', '🌸', '✨', '🦭', '💙'];
+            const emoji = document.createElement('div');
+            emoji.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+            emoji.style.position = 'fixed';
+            emoji.style.left = Math.random() * 100 + 'vw';
+            emoji.style.top = (Math.random() * 30 + 80) + 'vh';
+            emoji.style.fontSize = Math.random() * 28 + 20 + 'px';
+            emoji.style.opacity = Math.random() * 0.4 + 0.5;
+            emoji.style.pointerEvents = 'none';
+            emoji.style.zIndex = '9999';
+            const floatDuration = Math.random() * 4 + 6;
+            emoji.style.animation = `floatUp ${floatDuration}s ease-out forwards, sideSway ${floatDuration * 1.5}s ease-in-out infinite alternate`;
+            document.body.appendChild(emoji);
+            setTimeout(() => {
+                emoji.remove();
+            }, floatDuration * 1000 + 500);
+        }
+
+        // 이모지 애니메이션 키프레임 추가
+        if (!document.getElementById('dynamic-emoji-keyframes')) {
+            const styleSheet = document.createElement("style");
+            styleSheet.id = 'dynamic-emoji-keyframes';
+            styleSheet.innerText = `
+                @keyframes floatUp {
+                    0% { transform: translateY(0) rotate(0deg); opacity: inherit; }
+                    100% { transform: translateY(-120vh) rotate(${Math.random() * 400 - 200}deg); opacity: 0; }
+                }
+                @keyframes sideSway {
+                    0% { transform: translateX(-20px) rotate(-5deg); }
+                    100% { transform: translateX(20px) rotate(5deg); }
+                }
+            `;
+            document.head.appendChild(styleSheet);
+        }
+
+        // 이모지 생성 주기
+        setInterval(createFloatingEmoji, 3000);
+
+        // 버튼 클릭 시 이모지 폭발
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.cta-buttons .btn')) {
+                for (let i = 0; i < 15; i++) {
+                    setTimeout(createFloatingEmoji, i * 100);
+                }
+            }
+        });
+
+        // YouTube 모달 스크립트 (자동재생 추가)
+        const youtubeModal = document.getElementById('youtubeModal');
+        const youtubeModalClose = document.getElementById('youtubeModalClose');
+        const youtubePlayerContainer = document.getElementById('youtubePlayerContainer');
+        const songItems = document.querySelectorAll('.song-item');
+
+        songItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                const videoId = item.getAttribute('data-video-id');
+                if (videoId) {
+                    youtubePlayerContainer.innerHTML = '';
+                    const iframe = document.createElement('iframe');
+                    // 자동재생 추가
+                    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&controls=1`;
+                    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+                    iframe.allowFullscreen = true;
+                    youtubePlayerContainer.appendChild(iframe);
+                    
+                    youtubeModal.style.display = 'flex';
+                    youtubeModal.setAttribute('aria-hidden', 'false');
+                    document.body.style.overflow = 'hidden';
+                    
+                    youtubeModalClose.focus();
+                }
+            });
+        });
+
+        function closeYoutubeModal() {
+            youtubeModal.style.display = 'none';
+            youtubeModal.setAttribute('aria-hidden', 'true');
+            youtubePlayerContainer.innerHTML = '';
+            document.body.style.overflow = 'auto';
+        }
+
+        youtubeModalClose.addEventListener('click', closeYoutubeModal);
+
+        youtubeModal.addEventListener('click', (e) => {
+            if (e.target === youtubeModal) {
+                closeYoutubeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && youtubeModal.style.display === 'flex') {
+                closeYoutubeModal();
+            }
+        });
+
+        // 라이트박스 기능
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = lightbox.querySelector('img');
+        const lightboxClose = lightbox.querySelector('.lightbox-close');
+
+        document.addEventListener('click', (e) => {
+            if (e.target.matches('.gallery-item img')) {
+                lightboxImg.src = e.target.src;
+                lightboxImg.alt = e.target.alt;
+                lightbox.style.display = 'flex';
+                lightbox.classList.add('active');
+                lightbox.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+
+        function closeLightbox() {
+            lightbox.style.display = 'none';
+            lightbox.classList.remove('active');
+            lightbox.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = 'auto';
+        }
+
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        // 스크롤 탑 버튼
+        const scrollTopBtn = document.getElementById('scrollTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('show');
+            } else {
+                scrollTopBtn.classList.remove('show');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // 콘솔 이스터에그
+        console.log('%c🌊 ELSEA의 바다에 어서 오세요! 🌸', 'font-size: 24px; color: #87CEEB; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);');
+        console.log('%c🦭 엘범단 환영해요! 물범단 집합~! 🦭', 'font-size: 18px; color: #FFB6C1; font-weight: bold;');
+        console.log('%c너희들의 세상에 퐁당! 세이렌 등장! 💕', 'font-size: 16px; color: #5DADE2; font-style: italic;');
+    </script>
+</body>
+</html>
